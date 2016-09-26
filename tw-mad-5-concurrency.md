@@ -138,6 +138,79 @@ public class MyAsyncTask
 }
 ```
 
+# Handler
+
+## Handler - 1 - Introduction
+
+* A Handler allows you to process Message and Runnable objects in a thread
+* Two main reasons to use a Handler:
+    * Schedule something for later execution
+    * Execute something on a thread that you are not on (do not own)
+* The second bit is pretty important, since most of the time, Handlers are used to execute something on the UI thread.
+* Example: You run a web request in a separate thread and want to modify an UI element on completion.
+* Important methods: sendMessage and post (for sending messages and posting Runnables respectivly)
+
+## Handler - 2 - Looper
+
+* The Handler helps us post messages to the Looper
+* The Looper creates a message queue within a Thread and processes the queue until stopped
+* The Main (also: UI Thread) is a Looper
+    * You can use Looper.prepare() / Looper.loop() to create a message queue within your Thread
+* The Handler needs to be created on a Looper Thread, to be more precise, it needs to be created on the Looper Thread you wish to post messages to
+    * If you mess up Handler initialization (i.e. create the Handler in a non Looper Thread), you will get a notification informing you about the issue
+
+## Handler - 3 - Example
+
+```java
+public class MyHandlerActivity extends Activity { 
+  private TextView display; 
+  private boolean causeException = false; 
+  private MyHandler handler; 
+  @Override 
+  protected void onCreate(Bundle savedInstanceState) { 
+    super.onCreate(savedInstanceState); 
+    setContentView(R.layout.myhandleractivity); 
+    display = (TextView) 
+      findViewById(R.id.myhandleractivity_display); 
+    handler = new MyHandler();
+    MyThread myThread = new MyThread(); 
+    myThread.start(); 
+  }
+```
+
+## Handler - 3 - Example cont.
+
+```java
+  // why isn't this a good idea? (in general!)
+  public class MyHandler extends Handler { 
+   @Override 
+   public void handleMessage(Message msg) { 
+     display.setText(String.valueOf(msg.arg1)); 
+  }
+  private class MyThread extends Thread { 
+    @Override 
+    public void run() { 
+      for (int i = 0; i < 60; i++) { 
+        try {Thread.sleep(1000);} 
+        catch (Throwable tr) {} 
+          Message m = new Message(); 
+          m.arg1 = i; 
+          handler.sendMessage(m); 
+      } 
+    } 
+  } 
+}
+```
+
+# Conclusion
+
+## Conclusion - 1 - AsyncTask vs. Handler
+
+* AsyncTask provides the possibility to execute a task in an own thread and report back to whatever thread started the task
+* Handlers do not provide their own thread to execute a task in, they can be used to communicate with other threads and append Runnables / Messages to their queue
+* Both facilities allow communication with another thread:
+    * AsyncTask may be used whenever something needs to be threaded (web request, database access, calculations, etc.)
+    * Handlers can be used to provide feedback and manipulate UI elements, created by another thread. Sometimes it makes sense to use Handlers in combination with native threads (e.g. threads running in a Service).
 
 
 # Any Questions?
