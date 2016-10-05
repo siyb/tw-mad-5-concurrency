@@ -5,7 +5,7 @@
 ## Information
 
 * Any issues with this presentation? Write a ticket or send me a pull request ;).
-* Repo: [https://github.com/siyb/tw-mad-1-activities-and-fragments](https://github.com/siyb/tw-mad-1-activities-and-fragments)
+* Repo: [https://github.com/siyb/tw-mad-5-concurrency](https://github.com/siyb/tw-mad-5-concurrency)
 
 # Agenda
 
