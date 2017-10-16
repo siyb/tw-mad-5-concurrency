@@ -1,6 +1,6 @@
 % MAD - Android 5: Concurrency
 % Patrick Sturm
-% 22.03.2017
+% 16.10.2017
 
 ## Information
 
